@@ -21,8 +21,24 @@ namespace MvcStaryApp.Controllers
             _repo = repo;
         }
 
-        public IActionResult Index()
+        // Сделаем метод асинхронным
+        public async Task<IActionResult> Index()
         {
+            // Добавим создание нового пользователя
+            var newUser = new User()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Andrey",
+                LastName = "Petrov",
+                JoinDate = DateTime.Now
+            };
+
+            // Добавим в базу
+            await _repo.AddUser(newUser);
+
+            // Выведем результат
+            Console.WriteLine($"User with id {newUser.Id}, named {newUser.FirstName} was successfully added on {newUser.JoinDate}");
+
             return View();
         }
 
@@ -35,6 +51,11 @@ namespace MvcStaryApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public async Task<IActionResult> Authors()
+        {
+            var authors = await _repo.GetUsers();
+            return View(authors);
         }
     }
 }
