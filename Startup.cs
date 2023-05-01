@@ -28,6 +28,7 @@ namespace MvcStaryApp
         {
             // регистрация сервиса репозитория для взаимодействия с базой данных
             services.AddTransient<IBlogRepository, BlogRepository>();
+            services.AddTransient<IRequestRepository, RequestRepository>();
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection));
